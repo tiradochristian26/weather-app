@@ -1,26 +1,20 @@
 
-const SearchBar = () => {
+
+const SearchBar =() => {
+
     return (
-
         <>
-           <div className="my-2 mx-4">
-             <form action="">
-                <div className="flex justify-center items-center">
-                <input type="text"
-                  placeholder="Search city"
-                  className="outline outline-gray-300 w-full py-1 px-2 rounded-l-md focus:outline focus:outline-blue-600 md:py-2 md:px-4"
-                    />
-                   <button type="submit" 
-                   className="bg-blue-700 py-1 px-1 text-white  outline outline-blue-700 rounded-r-md md:p-2"
-                   >Search</button>
-                    </div>
-             </form>
+        <form action="" >
 
-           </div>
-        
+            <input type="text" 
+            placeholder="Search city city or country"
+            className="truncate outline outline-gray-800 w-full py-1.5 px-2  rounded-full text-gray-300 "
+            />
+
+        </form>
         </>
     )
 }
 
 
-export default SearchBar
+export default SearchBar;

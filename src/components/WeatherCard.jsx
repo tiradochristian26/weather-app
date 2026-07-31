@@ -1,54 +1,33 @@
-const WeatherCard = ({
-  temperature,
-  city,
-  humidity,
-  humidityText,
-  windSpeed,
-  windText,
-}) => {
-  return (
-    <div className="my-2 mx-4 space-y-4 shadow-lg py-2 rounded-lg bg-gradient-to-b from-blue-500 to-purple-600 md:space-y-8 ">
-      <div className=" flex flex-col justify-center items-center md:space-y-2">
-        <img
-          src="../src/assets/WeatherIcons/clear-day.svg"
-          alt="temperature icon"
-          className="w-30 "
-        />
-        <h1 className="font-bold text-3xl text-white md:text-5xl">
-          {" "}
-          {temperature}
-        </h1>
-        <h2 className="font-medium text-gray-300 md:text-2xl">{city}</h2>
-      </div>
+import { Clock } from "lucide-react"
+import Cities from "./common/CityCard";
+import SearchBar from "./Searchbar";
 
+const WeatherCard = () => {
 
-      <div className="flex justify-center items-center  md:p-2">
-        <div className="flex items-center md:justify-center w-full p-2">
-          <img
-            src="../src/assets/WeatherIcons/humidity.svg"
-            alt="humidity icon"
-            className="w-10 md:w-20"
-          />
-          <div >
-            <p className="font-medium xs: text-sm text-white md:text-2xl"> {humidity}</p>
-            <p className="text-sm text-white md:text-lg"> {humidityText}</p>
-          </div>
+    return (
+        <div className=" h-screen w-screen bg-gray-900 px-3 py-4 ">
+           <div className="flex  flex-col gap-4 ">
+             <div  className="flex justify-baseline items-center-safe gap-3  ">
+                <Clock color="#FFBF00"  size={32}/> 
+                <h1 className="text-white font-medium text-2xl">Glass</h1>
+                <h2 className="text-gray-500 uppercase text-xs ">Weather Station</h2>
+             </div>
+
+                <div>
+                        <SearchBar/>
+                </div>
+                <div className="flex justify-baseline gap-2 items-center flex-wrap lg:flex-col lg:items-baseline">
+                <Cities title={"Tokyo"}  color="bg-green-500" />
+                <Cities title={"Japan"}  color="bg-blue-500" />
+                <Cities title={"Singapore"}  color="bg-gray-500" />
+                <Cities title={"Abu Dhabi"}  color="bg-yellow-500" />
+                </div>
+           </div>
+            
+
         </div>
 
-        <div className="flex items-center md:justify-center   w-full p-2">
-          <img
-            src="../src/assets/WeatherIcons/wind.svg"
-            alt=""
-            className="w-10 md:w-20"
-          />
-          <div>
-            <p className="font-medium xs: text-sm text-white md:text-2xl ">{windSpeed}</p>
-            <p className="text-sm text-white md:text-lg ">{windText}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+    )
+}
 
 export default WeatherCard;
