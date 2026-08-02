@@ -1,32 +1,34 @@
-import { Clock } from "lucide-react"
-import Cities from "./common/CityCard";
-import SearchBar from "./Searchbar";
+import { useState } from "react";
+import { Cloud } from "lucide-react";
+const WeatherCard = ({CityName, coordinates,country}) => {
+    const [isCelsius,setIsCelsius] = useState(true)
 
-const WeatherCard = () => {
+    const toggle = () =>{
+        setIsCelsius((prev) =>!prev)
+    }
 
     return (
-        <div className=" h-screen w-screen bg-gray-900 px-3 py-4 ">
-           <div className="flex  flex-col gap-4 ">
-             <div  className="flex justify-baseline items-center-safe gap-3  ">
-                <Clock color="#FFBF00"  size={32}/> 
-                <h1 className="text-white font-medium text-2xl">Glass</h1>
-                <h2 className="text-gray-500 uppercase text-xs ">Weather Station</h2>
-             </div>
-
+        <div className="border border-white">
+            <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                <h1 className="text-white font-bold text-2xl">{CityName}</h1>
+                <h2 className="text-gray-300 tracking-wider font-light text-xs">{coordinates} <span>·</span> {country}</h2>
+                </div>
                 <div>
-                        <SearchBar/>
+                        <button type="button" className= {`w-14 h-8 rounded-full inline-flex items-center relative cursor-pointer p-1 py-3 ${isCelsius ? 'bg-blue-800' : 'bg-orange-800' }`}   onClick={toggle}>
+                        <span className = {` absolute rounded-full h-6 w-6 bg-white text-sm  transition-all duration-200 flex justify-center  items-center font-medium
+                            ${isCelsius ? 'left-1' : 'left-7'}
+                            `}> {isCelsius ? '°C' : '°F'}</span>
+                        </button>
                 </div>
-                <div className="flex justify-baseline gap-2 items-center flex-wrap lg:flex-col lg:items-baseline">
-                <Cities title={"Tokyo"}  color="bg-green-500" />
-                <Cities title={"Japan"}  color="bg-blue-500" />
-                <Cities title={"Singapore"}  color="bg-gray-500" />
-                <Cities title={"Abu Dhabi"}  color="bg-yellow-500" />
-                </div>
-           </div>
-            
+            </div>
 
+            <div>
+                <Cloud 
+                color="white"
+                size={120} />
+            </div>
         </div>
-
     )
 }
 
