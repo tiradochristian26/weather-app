@@ -8,7 +8,10 @@ import { Droplet } from "lucide-react";
 import { Wind } from "lucide-react";
 import { Gauge } from "lucide-react";
 import { SunMedium } from "lucide-react";
+import { fetchWeather, normalizeWeatherData } from "./components/service/WeatherAPI";
+import CloudLoader from "./utils/loader";
 const App = () => {
+
     const countries = [
         {
             id: 1,
@@ -69,6 +72,7 @@ const App = () => {
     return (
         <>
             <div className="w-screen  h-screen flex flex-col lg:flex-row gap-6  bg-gray-900 px-3 py-4 md:p-7 lg:p-10">
+
                 <div className="flex 
              flex-col gap-5">
                     <Title />
