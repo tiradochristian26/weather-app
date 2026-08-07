@@ -3,7 +3,69 @@ import Cities from "./components/common/CityCard";
 import Title from "./components/common/Title";
 import SearchBar from "./components/Searchbar";
 import WeatherCard from "./components/WeatherCard";
+import WeatherDetails from "./components/common/WeatherDetails";
+import { Droplet } from "lucide-react";
+import { Wind } from "lucide-react";
+import { Gauge } from "lucide-react";
+import { SunMedium } from "lucide-react";
 const App = () => {
+    const countries = [
+        {
+            id: 1,
+            name: 'Tokyo',
+            color: 'bg-green-500'
+        },
+        {
+            id: 2,
+            name: 'Singapore',
+            color: 'bg-gray-500'
+        },
+        {
+            id: 3,
+            name: 'Abu Dhabi',
+            color: 'bg-yellow-500'
+        }
+
+    ]
+
+    const weather = {
+        cityName: 'Tokyo',
+        coordinates: '35.68°N, 139.65°E',
+        country: 'Japan',
+        celsius: '12',
+        fahrenheit: '23',
+        condition: 'Cloudy'
+    }
+
+    const weatherElements = [
+        {
+            id: 1,
+            icon: Droplet,
+            temp: 23,
+            title: 'Humidity'
+        },
+        {
+            id: 2,
+            icon: Wind,
+            temp: 12,
+            title: 'Wind'
+
+        },
+        {
+            id: 3,
+            icon: Gauge,
+            temp: 997,
+            title: 'Pressure'
+
+        },
+        {
+            id: 4,
+            icon: SunMedium,
+            temp: 1,
+            title: 'UV index'
+
+        }
+    ]
     return (
         <>
             <div className="w-screen  h-screen flex flex-col lg:flex-row gap-6  bg-gray-900 px-3 py-4 md:p-7 lg:p-10">
@@ -13,22 +75,44 @@ const App = () => {
 
                     <div className="space-y-3">
                         <SearchBar />
-
-                        <div className="flex justify-baseline gap-2 items-center flex-wrap lg:flex-col lg:items-baseline  ">
-                            <Cities title={"Tokyo"} color="bg-green-500" />
-                            <Cities title={"Japan"} color="bg-blue-500" />
-                            <Cities title={"Singapore"} color="bg-gray-500" />
-                            <Cities title={"Abu Dhabi"} color="bg-yellow-500" />
+                        <div className="text-gray-400 space-y-1">
+                            <p>Recent searches</p>
+                            <div className="flex justify-baseline gap-2 items-center flex-wrap lg:flex-col lg:items-baseline  ">
+                                {countries.map(country =>
+                                (
+                                    <Cities
+                                        key={country.id}
+                                        title={country.name}
+                                        color={country.color} />
+                                )
+                                )}
+                            </div>
                         </div>
                     </div>
 
                 </div>
-                <div className="w-full md:flex-1 h-fit">
-                    <WeatherCard CityName={'Tokyo'} coordinates={'64.13°N 21.94°W '} country={'Iceland'} celsius={'-2°'} farenheit={'28°'} weather={'Snow'} />
+
+                <div className="w-full md:flex-1  h-fit space-y-3">
+
+                    <WeatherCard {...weather} />
+
+                    <div className=" gap-2 grid grid-cols-2 ">
+                        {weatherElements.map(el => {
+                            return (
+                                <WeatherDetails
+                                    key={el.id}
+                                    icon={el.icon}
+                                    temp={el.temp}
+                                    title={el.title}
+                                />
+                            )
+                        })}
+                    </div>
+
                 </div>
 
 
-            </div>
+            </div >
 
         </>
     )
