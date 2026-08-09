@@ -1,6 +1,6 @@
 const fetchWeather = async (city) => {
     const key = import.meta.env.VITE_WEATHER_API_KEY;
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric`
     try {
         const response = await fetch(url)
         if (!response.ok) {
@@ -18,6 +18,8 @@ const normalizeWeatherData = (apiResponse) => {
         cityName: apiResponse.name,
         coordinates: apiResponse.coord,
         country: apiResponse.sys.country,
+        celsius: apiResponse.main.temp,
+
     }
 }
 

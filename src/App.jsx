@@ -10,7 +10,29 @@ import { Gauge } from "lucide-react";
 import { SunMedium } from "lucide-react";
 import { fetchWeather, normalizeWeatherData } from "./components/service/WeatherAPI";
 import CloudLoader from "./utils/loader";
+import { useEffect, useState } from "react";
 const App = () => {
+    const [weatherData, setWeatherData] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [err, setErr] = useState(null)
+    useEffect(() => {
+        setLoading(true)
+        setErr(null)
+        const getWeatherData = async () => {
+            try {
+                const rawData = await fetchWeather('Manila')
+                const cleanData = normalizeWeatherData(rawData)
+                setWeatherData(cleanData)
+            } catch (error) {
+                setErr('Failed to fetch Data')
+            } finally {
+                setLoading(false)
+            }
+        }
+        getWeatherData()
+    }, [])
+    if (loading) return <CloudLoader />
+    if (err) return <p>{err}</p>
 
     const countries = [
         {
