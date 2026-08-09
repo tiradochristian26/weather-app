@@ -6,15 +6,23 @@ const fetchWeather = async (city) => {
             throw new Error('Failed to fetch Data')
         }
         return response.json()
+         
 }
 const normalizeWeatherData = (apiResponse) => {
-     
+        const celsius = Math.round( apiResponse.main.temp)
+        const fahrenheit = Math.round((celsius * 9/5) + 32)
+       
+        
     return {
         cityName: apiResponse.name,
         coordinates: apiResponse.coord,
         country: apiResponse.sys.country,
-        celsius: apiResponse.main.temp,
-
+        celsius:celsius,
+        fahrenheit: fahrenheit,
+        humidity: apiResponse.main.humidity,
+        wind:apiResponse.wind.speed,
+        pressure:apiResponse.main.pressure,
+        condition:apiResponse.weather[0].description  
     }
 }
 export { fetchWeather, normalizeWeatherData }

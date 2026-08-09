@@ -22,6 +22,9 @@ const App = () => {
                 try {
                       const rawData =  await fetchWeather('Bacolod')
                       const cleanData = normalizeWeatherData(rawData)
+                      console.log(rawData)
+                      console.log(cleanData)
+                     
                         setWeatherData(cleanData)
                 } catch (error) {
                       setErr(error);
