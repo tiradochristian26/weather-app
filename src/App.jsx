@@ -12,27 +12,25 @@ import { fetchWeather, normalizeWeatherData } from "./components/service/Weather
 import CloudLoader from "./utils/loader";
 import { useEffect, useState } from "react";
 const App = () => {
-    const [weatherData, setWeatherData] = useState(null)
-    const [loading, setLoading] = useState(true)
-    const [err, setErr] = useState(null)
-    useEffect(() => {
-        setLoading(true)
-        setErr(null)
-        const getWeatherData = async () => {
-            try {
-                const rawData = await fetchWeather('Manila')
-                const cleanData = normalizeWeatherData(rawData)
-                setWeatherData(cleanData)
-            } catch (error) {
-                setErr('Failed to fetch Data')
-            } finally {
-                setLoading(false)
+        const [weatherData,setWeatherData] = useState(null);
+        const [err,setErr] = useState(null)
+        const [loader,setLoader] = useState(false)
+        useEffect(() => {
+            const fetchWeatherData =  async () => {
+            setLoader(true)
+            setErr(null)
+                try {
+                      const rawData =  await fetchWeather('Bacolod')
+                      const cleanData = normalizeWeatherData(rawData)
+                        setWeatherData(cleanData)
+                } catch (error) {
+                      setErr(error);
+                }finally{
+                    setLoader(false)
+                }
             }
-        }
-        getWeatherData()
-    }, [])
-    if (loading) return <CloudLoader />
-    if (err) return <p>{err}</p>
+            fetchWeatherData()
+        },[])
 
     const countries = [
         {
@@ -57,8 +55,8 @@ const App = () => {
         cityName: 'Tokyo',
         coordinates: '35.68°N, 139.65°E',
         country: 'Japan',
-        celsius: '12',
-        fahrenheit: '23',
+        celsius: '12°',
+        fahrenheit: '23°',
         condition: 'Cloudy'
     }
 
@@ -91,6 +89,11 @@ const App = () => {
 
         }
     ]
+
+    if(loader)( <CloudLoader/>)
+    if(err)(<p>{err}</p>)
+    
+
     return (
         <>
             <div className="w-screen  h-screen flex flex-col lg:flex-row gap-6  bg-gray-900 px-3 py-4 md:p-7 lg:p-10">
