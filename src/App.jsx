@@ -21,12 +21,11 @@ const App = () => {
             setLoader(true)
             setErr(null)
                 try {
-                      const rawData =  await fetchWeather('Manila',controller.signal)
+                      const rawData =  await fetchWeather('binalbagan',controller.signal)
                       const cleanData = normalizeWeatherData(rawData)
-                      console.log(rawData)
                         setWeatherData(cleanData)
                 } catch (error) {
-                      if(error.name === 'AbortError'){
+                      if(error.name !== 'AbortError'){
                         setErr(error);
                       }
                 }finally{
@@ -36,8 +35,8 @@ const App = () => {
             fetchWeatherData()
             return () => controller.abort()
         },[])
-    if(loader)( <CloudLoader/>)
-    if(err)(<p>{err}</p>)
+    if(loader) return <CloudLoader/>
+    if(err) return <p>{err.message}</p>
     if (!weatherData) return null
 
     const countries = [

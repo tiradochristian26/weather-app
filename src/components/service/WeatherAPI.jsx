@@ -3,6 +3,12 @@ const fetchWeather = async (city,signal) => {
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric`
      const response = await fetch(url,{signal})
             if (!response.ok) {
+                if(response.status === 404){
+                    throw new Error(`${response.status} Not Found `)
+                }
+                if(response.status === 401){
+                    throw new Error(`${response.status} Authentication required. unable to fetch Data`)
+                }
             throw new Error('Failed to fetch Data')
         }
         return response.json()
