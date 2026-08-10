@@ -22,7 +22,8 @@ const normalizeWeatherData = (apiResponse) => {
         wind:apiResponse.wind.speed,
         pressure:apiResponse.main.pressure,
         condition:apiResponse.weather[0].description,
-        country:apiResponse.sys.country
+        country:apiResponse.sys.country,
+        visibility:apiResponse.visibility
     }
 }
 export { fetchWeather, normalizeWeatherData }

@@ -7,7 +7,7 @@ import WeatherDetails from "./components/common/WeatherDetails";
 import { Droplet } from "lucide-react";
 import { Wind } from "lucide-react";
 import { Gauge } from "lucide-react";
-import { SunMedium } from "lucide-react";
+import { Eye } from "lucide-react";
 import { fetchWeather, normalizeWeatherData } from "./components/service/WeatherAPI";
 import CloudLoader from "./utils/loader";
 import { useEffect, useState } from "react";
@@ -73,28 +73,28 @@ const App = () => {
         {
             id: 1,
             icon: Droplet,
-            temp: 23,
-            title: weatherData.humidity
+            temp: weatherData.humidity,
+            title: 'Humidity'
         },
         {
             id: 2,
             icon: Wind,
-            temp: 12,
-            title: weatherData.wind
+            temp:  weatherData.wind,
+            title:  'Wind speed'
 
         },
         {
             id: 3,
             icon: Gauge,
-            temp: 997,
-            title: weatherData.pressure
+            temp: weatherData.pressure,
+            title: 'Pressure'
 
         },
         {
             id: 4,
-            icon: SunMedium,
-            temp: 1,
-            title: 'UV index'
+            icon: Eye,
+            temp: weatherData.visibility,
+            title: 'Visibility'
 
         }
     ]
