@@ -16,24 +16,29 @@ const App = () => {
         const [err,setErr] = useState(null)
         const [loader,setLoader] = useState(false)
         useEffect(() => {
+            const controller = new AbortController()
             const fetchWeatherData =  async () => {
             setLoader(true)
             setErr(null)
                 try {
-                      const rawData =  await fetchWeather('Bacolod')
+                      const rawData =  await fetchWeather('Manila',controller.signal)
                       const cleanData = normalizeWeatherData(rawData)
                       console.log(rawData)
-                      console.log(cleanData)
-                     
                         setWeatherData(cleanData)
                 } catch (error) {
-                      setErr(error);
+                      if(error.name === 'AbortError'){
+                        setErr(error);
+                      }
                 }finally{
                     setLoader(false)
                 }
             }
             fetchWeatherData()
+            return () => controller.abort()
         },[])
+    if(loader)( <CloudLoader/>)
+    if(err)(<p>{err}</p>)
+    if (!weatherData) return null
 
     const countries = [
         {
@@ -55,12 +60,13 @@ const App = () => {
     ]
 
     const weather = {
-        cityName: 'Tokyo',
-        coordinates: '35.68°N, 139.65°E',
-        country: 'Japan',
-        celsius: '12°',
-        fahrenheit: '23°',
-        condition: 'Cloudy'
+        cityName: weatherData.cityName,
+        lat: weatherData.lat,
+        lon:weatherData.lon,
+        country: weatherData.country,
+        celsius: weatherData.celsius,
+        fahrenheit: weatherData.fahrenheit,
+        condition:weatherData.condition
     }
 
     const weatherElements = [
@@ -68,20 +74,20 @@ const App = () => {
             id: 1,
             icon: Droplet,
             temp: 23,
-            title: 'Humidity'
+            title: weatherData.humidity
         },
         {
             id: 2,
             icon: Wind,
             temp: 12,
-            title: 'Wind'
+            title: weatherData.wind
 
         },
         {
             id: 3,
             icon: Gauge,
             temp: 997,
-            title: 'Pressure'
+            title: weatherData.pressure
 
         },
         {
@@ -93,10 +99,8 @@ const App = () => {
         }
     ]
 
-    if(loader)( <CloudLoader/>)
-    if(err)(<p>{err}</p>)
-    
 
+ 
     return (
         <>
             <div className="w-screen  h-screen flex flex-col lg:flex-row gap-6  bg-gray-900 px-3 py-4 md:p-7 lg:p-10">
@@ -125,9 +129,9 @@ const App = () => {
                 </div>
 
                 <div className="w-full md:flex-1  h-fit space-y-3">
-
-                    <WeatherCard {...weather} />
-
+                    <WeatherCard 
+                   {...weather}
+                     />
                     <div className=" gap-2 grid grid-cols-2 ">
                         {weatherElements.map(el => {
                             return (
@@ -142,7 +146,6 @@ const App = () => {
                     </div>
 
                 </div>
-
 
             </div >
 

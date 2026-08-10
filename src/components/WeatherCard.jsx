@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Snowflake } from "lucide-react";
 
-const WeatherCard = ({ cityName, coordinates, country, celsius, fahrenheit, condition }) => {
+const WeatherCard = ({ cityName,lon,lat, country, celsius, fahrenheit, condition }) => {
    const [isCelsius, setIsCelsius] = useState(true)
    const toggle = () => {
       setIsCelsius((prev) => !prev)
@@ -11,7 +11,7 @@ const WeatherCard = ({ cityName, coordinates, country, celsius, fahrenheit, cond
          <div className="flex items-center justify-between">
             <div className="space-y-1">
                <h1 className="text-white font-bold text-2xl md:text-4xl">{cityName}</h1>
-               <h2 className="text-gray-300 tracking-wider font-light text-xs md:text-sm">{coordinates} <span>·</span> {country}</h2>
+               <h2 className="text-gray-300 tracking-wider font-light text-xs md:text-sm">{lat} <span>·</span>{lon} {country}</h2>
             </div>
             <div>
                <button type="button" className={`w-14 h-8 rounded-full md:w-15 md:h-10 inline-flex items-center relative cursor-pointer p-1 py-3 ${isCelsius ? 'bg-blue-800' : 'bg-orange-800'}`} onClick={toggle}>
