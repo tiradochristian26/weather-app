@@ -15,13 +15,14 @@ const App = () => {
         const [weatherData,setWeatherData] = useState(null);
         const [err,setErr] = useState(null)
         const [loader,setLoader] = useState(false)
+        const [city,setCity] = useState('Manila')
         useEffect(() => {
             const controller = new AbortController()
             const fetchWeatherData =  async () => {
             setLoader(true)
             setErr(null)
                 try {
-                      const rawData =  await fetchWeather('binalbagan',controller.signal)
+                      const rawData =  await fetchWeather( city, controller.signal)
                       const cleanData = normalizeWeatherData(rawData)
                         setWeatherData(cleanData)
                 } catch (error) {
@@ -34,11 +35,16 @@ const App = () => {
             }
             fetchWeatherData()
             return () => controller.abort()
-        },[])
+        },[city])
+
+ 
     if(loader) return <CloudLoader/>
     if(err) return <p>{err.message}</p>
     if (!weatherData) return null
 
+    const handleSearch = (newCity) => {
+        setCity(newCity)
+    }
     const countries = [
         {
             id: 1,
@@ -98,8 +104,6 @@ const App = () => {
         }
     ]
 
-
- 
     return (
         <>
             <div className="w-screen  h-screen flex flex-col lg:flex-row gap-6  bg-gray-900 px-3 py-4 md:p-7 lg:p-10">
@@ -109,7 +113,7 @@ const App = () => {
                     <Title />
 
                     <div className="space-y-3">
-                        <SearchBar />
+                        <SearchBar onSearch={handleSearch} />
                         <div className="text-gray-400 space-y-1">
                             <p>Recent searches</p>
                             <div className="flex justify-baseline gap-2 items-center flex-wrap lg:flex-col lg:items-baseline  ">

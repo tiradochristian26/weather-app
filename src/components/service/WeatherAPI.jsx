@@ -17,7 +17,7 @@ const fetchWeather = async (city,signal) => {
 const normalizeWeatherData = (apiResponse) => {
         const celsius = Math.round( apiResponse.main.temp)
         const fahrenheit = Math.round((celsius * 9/5) + 32)
-     
+
     return {
         cityName: apiResponse.name,
         lat:apiResponse.coord.lat,
@@ -30,6 +30,7 @@ const normalizeWeatherData = (apiResponse) => {
         condition:apiResponse.weather[0].description,
         country:apiResponse.sys.country,
         visibility:apiResponse.visibility
+        
     }
 }
 export { fetchWeather, normalizeWeatherData }
