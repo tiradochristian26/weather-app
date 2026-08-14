@@ -1,4 +1,3 @@
-
 import Cities from "./components/common/CityCard";
 import Title from "./components/common/Title";
 import SearchBar from "./components/Searchbar";
@@ -24,10 +23,16 @@ const App = () => {
                 try {
                       const rawData =  await fetchWeather( city, controller.signal)
                       const cleanData = normalizeWeatherData(rawData)
-                        setWeatherData(cleanData)
+                      setWeatherData(cleanData)
                 } catch (error) {
                       if(error.name !== 'AbortError'){
-                        setErr(error);
+                        if(error.message.startsWith("404")){
+                            setErr({message: `Coudn't find ${city} Please Try another City`})
+                        }else if(error.message.startsWith('401')){
+                            setErr({message:'Weather service authentication failed. Please try again later.' })
+                        }else{
+                            setErr(err)
+                        }
                       }
                 }finally{
                     setLoader(false)
@@ -36,11 +41,6 @@ const App = () => {
             fetchWeatherData()
             return () => controller.abort()
         },[city])
-
- 
-    if(loader) return <CloudLoader/>
-    if(err) return <p>{err.message}</p>
-    if (!weatherData) return null
 
     const handleSearch = (newCity) => {
         setCity(newCity)
@@ -64,7 +64,7 @@ const App = () => {
 
     ]
 
-    const weather = {
+    const weather = weatherData ?  {
         cityName: weatherData.cityName,
         lat: weatherData.lat,
         lon:weatherData.lon,
@@ -72,15 +72,14 @@ const App = () => {
         celsius: weatherData.celsius,
         fahrenheit: weatherData.fahrenheit,
         condition:weatherData.condition
-    }
+    } : null
 
-    const weatherElements = [
+    const weatherElements =  weatherData ?[ 
         {
             id: 1,
             icon: Droplet,
             temp: weatherData.humidity,
-            title: 'Humidity'
-        },
+            title: 'Humidity'},
         {
             id: 2,
             icon: Wind,
@@ -102,16 +101,12 @@ const App = () => {
             title: 'Visibility'
 
         }
-    ]
-
+    ] : []
     return (
         <>
             <div className="w-screen  h-screen flex flex-col lg:flex-row gap-6  bg-gray-900 px-3 py-4 md:p-7 lg:p-10">
-
-                <div className="flex 
-             flex-col gap-5">
+                <div className="flex flex-col gap-5">
                     <Title />
-
                     <div className="space-y-3">
                         <SearchBar onSearch={handleSearch} />
                         <div className="text-gray-400 space-y-1">
@@ -128,11 +123,20 @@ const App = () => {
                             </div>
                         </div>
                     </div>
-
                 </div>
 
+
                 <div className="w-full md:flex-1  h-fit space-y-3">
-                    <WeatherCard 
+                    {loader && <CloudLoader/> }
+
+                    {!loader && err && (
+                         <div className="text-red-400 bg-gray-800 rounded-xl p-4">
+                        <p>{err.message}</p>
+                    </div>
+                    )}
+                    {!loader && !err && weatherData && (
+                            <>
+                                 <WeatherCard 
                    {...weather}
                      />
                     <div className=" gap-2 grid grid-cols-2 ">
@@ -147,6 +151,9 @@ const App = () => {
                             )
                         })}
                     </div>
+                            </>
+                    )}
+                   
 
                 </div>
 

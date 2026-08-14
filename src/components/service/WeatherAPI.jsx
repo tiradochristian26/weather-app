@@ -4,10 +4,10 @@ const fetchWeather = async (city,signal) => {
      const response = await fetch(url,{signal})
             if (!response.ok) {
                 if(response.status === 404){
-                    throw new Error(`${response.status} Not Found `)
+                    throw new Error(`${response.status} `)
                 }
                 if(response.status === 401){
-                    throw new Error(`${response.status} Authentication required. unable to fetch Data`)
+                    throw new Error(`${response.status}`)
                 }
             throw new Error('Failed to fetch Data')
         }
