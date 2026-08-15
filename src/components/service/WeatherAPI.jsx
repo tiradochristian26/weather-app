@@ -1,23 +1,27 @@
 const fetchWeather = async (city,signal) => {
     const key = import.meta.env.VITE_WEATHER_API_KEY;
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric`
+    let error = null
      const response = await fetch(url,{signal})
             if (!response.ok) {
                 if(response.status === 404){
-                    throw new Error(`${response.status} `)
+                    error = new Error(`"${city}" not found please try another city `)
+                    error.status = 404
+                    throw error;
+                }else if(response.status === 401){
+                    error = new Error('Your session has expired. Please log in again.')
+                    error.status = 401
+                    throw error;
                 }
-                if(response.status === 401){
-                    throw new Error(`${response.status}`)
-                }
-            throw new Error('Failed to fetch Data')
-        }
+                
+            }
         return response.json()
          
 }
 const normalizeWeatherData = (apiResponse) => {
         const celsius = Math.round( apiResponse.main.temp)
         const fahrenheit = Math.round((celsius * 9/5) + 32)
-
+      
     return {
         cityName: apiResponse.name,
         lat:apiResponse.coord.lat,

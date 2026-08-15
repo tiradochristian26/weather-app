@@ -26,14 +26,11 @@ const App = () => {
                       setWeatherData(cleanData)
                 } catch (error) {
                       if(error.name !== 'AbortError'){
-                        if(error.message.startsWith("404")){
-                            setErr({message: `Coudn't find ${city} Please Try another City`})
-                        }else if(error.message.startsWith('401')){
-                            setErr({message:'Weather service authentication failed. Please try again later.' })
-                        }else{
-                            setErr(err)
-                        }
+                            setErr(error)
                       }
+                      if(error.status === 404) setErr(error)
+                      else if(error.status === 401)  setErr(error)
+
                 }finally{
                     setLoader(false)
                 }
@@ -45,6 +42,7 @@ const App = () => {
     const handleSearch = (newCity) => {
         setCity(newCity)
     }
+    
     const countries = [
         {
             id: 1,
@@ -71,7 +69,7 @@ const App = () => {
         country: weatherData.country,
         celsius: weatherData.celsius,
         fahrenheit: weatherData.fahrenheit,
-        condition:weatherData.condition
+        condition:weatherData.condition,
     } : null
 
     const weatherElements =  weatherData ?[ 
