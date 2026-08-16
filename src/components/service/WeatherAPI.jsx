@@ -9,9 +9,11 @@ const fetchWeather = async (city,signal) => {
                     error.status = 404
                     throw error;
                 }else if(response.status === 401){
-                    error = new Error('Your session has expired. Please log in again.')
+                    error = new Error('The API key is invalid or missing.')
                     error.status = 401
                     throw error;
+                }else{
+                    throw new Error('Failed to fetch data')
                 }
                 
             }

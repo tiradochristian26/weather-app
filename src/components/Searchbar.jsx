@@ -8,7 +8,6 @@ const SearchBar = ({onSearch}) => {
     const handleSubmit = (e) => {
         e.preventDefault()  
         onSearch(value.trim())
-        
     }
     return (
         <form action="" onSubmit={handleSubmit}

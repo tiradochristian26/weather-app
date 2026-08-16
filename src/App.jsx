@@ -10,11 +10,13 @@ import { Eye } from "lucide-react";
 import { fetchWeather, normalizeWeatherData } from "./components/service/WeatherAPI";
 import CloudLoader from "./utils/loader";
 import { useEffect, useState } from "react";
+
 const App = () => {
         const [weatherData,setWeatherData] = useState(null);
         const [err,setErr] = useState(null)
         const [loader,setLoader] = useState(false)
         const [city,setCity] = useState('Manila')
+        const [recentSearches,setRecentSearches] = useState(['Manila'])
         useEffect(() => {
             const controller = new AbortController()
             const fetchWeatherData =  async () => {
@@ -24,13 +26,17 @@ const App = () => {
                       const rawData =  await fetchWeather( city, controller.signal)
                       const cleanData = normalizeWeatherData(rawData)
                       setWeatherData(cleanData)
+
+                       setRecentSearches((prev) => {
+            const deDupe = prev.filter(
+                city =>    city.toLowerCase() !== cleanData.cityName.toLowerCase()
+            )
+            return [cleanData.cityName, ...deDupe].slice(0,3)
+        })
                 } catch (error) {
                       if(error.name !== 'AbortError'){
                             setErr(error)
                       }
-                      if(error.status === 404) setErr(error)
-                      else if(error.status === 401)  setErr(error)
-
                 }finally{
                     setLoader(false)
                 }
@@ -41,22 +47,26 @@ const App = () => {
 
     const handleSearch = (newCity) => {
         setCity(newCity)
+
+       
     }
-    
+
+        
+
     const countries = [
         {
             id: 1,
-            name: 'Tokyo',
+            name: 'Bacolod',
             color: 'bg-green-500'
         },
         {
             id: 2,
-            name: 'Singapore',
+            name: 'Iloilo',
             color: 'bg-gray-500'
         },
         {
             id: 3,
-            name: 'Abu Dhabi',
+            name: 'Cebu',
             color: 'bg-yellow-500'
         }
 
@@ -100,6 +110,8 @@ const App = () => {
 
         }
     ] : []
+
+    const colors = ['bg-green-500', 'bg-gray-500', 'bg-yellow-500']
     return (
         <>
             <div className="w-screen  h-screen flex flex-col lg:flex-row gap-6  bg-gray-900 px-3 py-4 md:p-7 lg:p-10">
@@ -110,19 +122,20 @@ const App = () => {
                         <div className="text-gray-400 space-y-1">
                             <p>Recent searches</p>
                             <div className="flex justify-baseline gap-2 items-center flex-wrap lg:flex-col lg:items-baseline  ">
-                                {countries.map(country =>
+                                {recentSearches.map((cityName,index) =>
                                 (
                                     <Cities
-                                        key={country.id}
-                                        title={country.name}
-                                        color={country.color} />
+                                        key={cityName}
+                                        title={cityName}
+                                        color={colors[index % colors.length]}
+                                        onSearch={handleSearch}
+                                        />
                                 )
                                 )}
                             </div>
                         </div>
                     </div>
                 </div>
-
 
                 <div className="w-full md:flex-1  h-fit space-y-3">
                     {loader && <CloudLoader/> }
